@@ -6,22 +6,30 @@
     <div class="container">
         <h1 class="my-3">Voici les annonces de nos hôtes</h1>
         <div class="row">
-            {% for i in 0..20 %}
+            {% for ad in ads %}
                 <div class="col-md-4">
                     <div class="card bg-light mb-3">
                         {# header de la card #}
                         <div class="card-header text-center">
-                            3 chambres,
-                            <strong>49&euros; /nuit</strong>
+                            {{ ad.rooms }}
+                            chambre(s),
+                            <strong>{{ ad.price }}
+                                &euro; /nuit</strong>
                             <br>
                             <small>Pas encore noté</small>
                         </div>
-                        <img src="http://placehold.it/1000x400" alt="Image de l'appartement" style="height: 200px; width: 100%; display: block">
+                        <a href="{{path('ads_show', {'slug': ad.slug})}}">
+                            <img src=" {{ ad.coverImage}} " alt="Image de l'appartement" style="height: 200px; width: 100%; display: block">
+                        </a>
                         {# corps de la card #}
                         <div class="card-body">
-                            <h4 class="card-title">Appartement de ouf !</h4>
-                            <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam cum officia, magni aut odio voluptates odit consequuntur aliquid illum delectus.</p>
-                            <a href="#" class="btn btn-secondary">En savoir plus</a>
+                            <h4 class="card-title">
+                                <a href="{{path('ads_show', {'slug': ad.slug})}}">
+                                    {{ad.title}}
+                                </a>
+                            </h4>
+                            <p class="card-text">{{ ad.introduction }}</p>
+                            <a href="{{path('ads_show', {'slug': ad.slug})}}" class="btn btn-secondary">En savoir plus</a>
                         </div>
                     </div>
                 </div>
