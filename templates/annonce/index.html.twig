@@ -6,31 +6,31 @@
     <div class="container">
         <h1 class="my-3">Voici les annonces de nos hôtes</h1>
         <div class="row">
-            {% for ad in ads %} 
+            {% for annonce in annonces %} 
             {# route de l'annonce #}
-                {% set route= path('ads_show', {'slug': ad.slug}) %}
+                {% set route= path('annonces_show', {'slug': annonce.slug}) %}
                 <div class="col-md-4">
                     <div class="card bg-light mb-3">
                         {# header de la card #}
                         <div class="card-header text-center">
-                            {{ ad.rooms }}
+                            {{ annonce.rooms }}
                             chambre(s),
-                            <strong>{{ ad.price }}
+                            <strong>{{ annonce.price }}
                                 &euro; /nuit</strong>
                             <br>
                             <small>Pas encore noté</small>
                         </div>
                         <a href="{{route}}">
-                            <img src=" {{ ad.coverImage}} " alt="Image de l'appartement" style="height: 200px; width: 100%; display: block">
+                            <img src=" {{ annonce.coverImage}} " alt="Image de l'appartement" style="height: 200px; width: 100%; display: block">
                         </a>
                         {# corps de la card #}
                         <div class="card-body">
                             <h4 class="card-title">
                                 <a href="{{route}}">
-                                    {{ad.title}}
+                                    {{annonce.title}}
                                 </a>
                             </h4>
-                            <p class="card-text">{{ ad.introduction }}</p>
+                            <p class="card-text">{{ annonce.introduction }}</p>
                             <a href="{{route}}" class="btn btn-secondary">En savoir plus</a>
                         </div>
                     </div>

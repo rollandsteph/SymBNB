@@ -27,10 +27,10 @@ class Image
     private $caption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ad", inversedBy="images")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Annonce", inversedBy="images")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $ad;
+    private $annonce;
 
     public function getId(): ?int
     {
@@ -61,14 +61,14 @@ class Image
         return $this;
     }
 
-    public function getAd(): ?Ad
+    public function getAnnonce(): ?Annonce
     {
-        return $this->ad;
+        return $this->annonce;
     }
 
-    public function setAd(?Ad $ad): self
+    public function setAnnonce(?Annonce $annonce): self
     {
-        $this->ad = $ad;
+        $this->annonce = $annonce;
 
         return $this;
     }

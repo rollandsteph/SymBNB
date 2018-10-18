@@ -1,24 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ ad.title}}
+    {{ annonce.title}}
 {% endblock %}
 
 {% block body %}
 
-    <div class="ad-title" style="background-image: url( {{ ad.coverImage}} )">
+    <div class="ad-title" style="background-image: url( {{ annonce.coverImage}} )">
         <div class="container">
             <h1>
-                {{ad.title}}
+                {{annonce.title}}
             </h1>
             <p>
-                {{ad.introduction}}
+                {{annonce.introduction}}
             </p>
             <p class="h2">
-                <strong>{{ad.rooms}}
+                <strong>{{annonce.rooms}}
                     chambres</strong>
                 pour
-                <strong>{{ad.price}}
+                <strong>{{annonce.price}}
                     &euro;
                 </strong>
                 par nuit
@@ -29,19 +29,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 mb-3">
-                {{ad.content | raw}}
+                {{annonce.content | raw}}
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
-                        {% for image in ad.images %}
+                        {% for image in annonce.images %}
                             <li data-target="#carouselExampleIndicators" data-slide-to="{{ loop.index0 }}" {% if loop.first %} class="active" {% endif %}></li>
                         {% endfor %}
                     </ol>
                     <div class="carousel-inner">
-                        {% for image in ad.images %}
+                        {% for image in annonce.images %}
                             <div class="carousel-item {% if loop.first %}active{% endif %}">
                                 <img class="d-block w-100" src="{{ image.url }}" alt="{{image.caption}}">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <h5>{{ad.title}}</h5>
+                                    <h5>{{annonce.title}}</h5>
                                     <p>{{image.caption}}</p>
                                 </div>
                             </div>

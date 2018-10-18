@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Ad;
+use App\Entity\Annonce;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -12,11 +12,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Ad[]    findAll()
  * @method Ad[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AdRepository extends ServiceEntityRepository
+class AnnonceRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Ad::class);
+        parent::__construct($registry, Annonce::class);
     }
 
 //    /**

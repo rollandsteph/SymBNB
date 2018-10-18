@@ -8,10 +8,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AdRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AnnonceRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Ad
+class Annonce
 {
     /**
      * @ORM\Id()
@@ -56,7 +56,7 @@ class Ad
     private $rooms;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="ad", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="annonce", orphanRemoval=true, cascade={"persist","remove"})
      */
     private $images;
 
@@ -176,7 +176,7 @@ class Ad
     {
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
-            $image->setAd($this);
+            $image->setAnnonce($this);
         }
 
         return $this;
@@ -187,8 +187,8 @@ class Ad
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
             // set the owning side to null (unless already changed)
-            if ($image->getAd() === $this) {
-                $image->setAd(null);
+            if ($image->getAnnonce() === $this) {
+                $image->setAnnonce(null);
             }
         }
 

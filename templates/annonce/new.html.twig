@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Création d'une annonce
+{% endblock %}
+{# on précise ici qu'il va falloir utiliser un thème pour le formulaire "formNewAnnonce" qui est dans ce fichier #}
+{% form_theme formNewAnnonce _self %}
+
+{% block body %}
+    <div class="container">
+        <h1>Créer une nouvelle annonce</h1>
+        {{form_start(formNewAnnonce)}}
+        <div class="form-group">
+            {{form_widget(formNewAnnonce)}}
+        </div>
+        <button type="submit" class="btn btn-primary">Créer l'annonce</button>
+        {{form_end(formNewAnnonce)}}
+    </div>
+{% endblock %}
+
+{# on définit comment va s'afficher le bloc concernant la collection des images 
+donc le conteneur global de tous les champs images #}
+{% block _annonce_images_row %}
+    <div class="card bg-light mb-3">
+        <div class="card-header">Les images de l'annonce</div>
+        <div class="card-body">
+            <p>
+                <i>Ici vous pouvez ajouter vos images</i>
+            </p>
+            {# on positionne une légende globale pour toute la collection (en haut comme une entête de tableau) #}
+            <div class="row">
+                <div class="col">Url de l'image</div>
+                <div class="col">Légende de l'image</div>
+            </div>
+            <p class="card-text">
+                <div class="form-group">
+                    {# ici on parle bien de la collection donc du bloc qui contient toutes les occurences de 'images' (url + caption) #}
+                    {{ form_widget(form) }}
+                    <input type="hidden" id="widgets-counter" value="0">
+                    
+                    <button type="button" id="add-image" class="btn btn-primary">Ajouter une image</button>
+                </div>
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{# on définit comment va s'afficher la row c'est à dire l'intégralité de ce qui concerne une image (label + error + widget )
+et ici on dit que l'on ne veut voir que le widget et les erreurs qui représente une occurrence de la collection #}
+{% block _annonce_images_entry_row %}
+    {# ici la variable "form" représente une occurence de ma collection donc une ImageType 
+    composée des deux champs : url et caption  #}
+    <div class="form-group" id="block_{{id}}">
+        <div class="row">
+            <div class="col-10">
+                <div class="row">
+                    <div class="col">
+                        {# ici on parle du champ (widget) image (url et caption) donc sans les labels
+             et comme j'omets de préciser les labels alors que je défini la "row", ils n'apparaîtront pas #}
+                        {{ form_widget(form.url)}}
+                        {{ form_errors(form.url)}}
+                    </div>
+
+                    <div class="col">
+                        {{ form_widget(form.caption)}}
+                        {{ form_errors(form.caption)}}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <button type="button" data-action="delete" data-target="#block_{{id}}" class="btn btn-danger">X</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+    $('#add-image').click(function () {
+        //récupération de la valeur de l'input widgets-counter
+        // le + devant permet de parser la valeur en int et non en chaine de caractère
+        const index = +$('#widgets-counter').val;
+        //recupération du prototype
+        const template = $('#annonce_images').data('prototype').replace(/__name__/g, index);
+        // on ajoute cette template à la suite des autres
+        $('#annonce_images').append(template);
+        // on ajoute 1 à la valeur de l'input widgets-counter
+        $('#widgets-counter').val(index+1);
+        // je gére le bouton supprimer
+        handleDeleteButtons();
+    })
+
+    function handleDeleteButtons() {
+        $('button[data-action="delete"]').click(function () {
+            const target = this.dataset.target;
+            $(target).remove();
+        })
+    }
+
+    handleDeleteButtons();
+</script>
+
+{% endblock %}
