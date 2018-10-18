@@ -1,21 +1,21 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-    Création d'une annonce
+    Modification d'une annonce
 {% endblock %}
-{# on précise ici qu'il va falloir utiliser un thème pour le formulaire "formNewAnnonce" qui est dans ce fichier #}
 {% form_theme formAnnonce 'annonce/_collection.html.twig' %}
 
 {% block body %}
     <div class="container">
-        <h1>Créer une nouvelle annonce</h1>
+        <h1>modifier l'annonce : {{annonce.title}}</h1>
         {{form_start(formAnnonce)}}
         <div class="form-group">
             {{form_widget(formAnnonce)}}
         </div>
-        <button type="submit" class="btn btn-primary">Créer l'annonce</button>
+        <button type="submit" class="btn btn-primary">Modifier l'annonce</button>
         {{form_end(formAnnonce)}}
     </div>
 {% endblock %}
+
 
 {% block javascripts %}
 

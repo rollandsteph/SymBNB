@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
@@ -18,11 +19,15 @@ class Image
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Url()
      */
     private $url;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *      min=10,
+     *      minMessage = "le Titre doit comporter au moins {{ limit }} caratères" )
      */
     private $caption;
 
@@ -32,41 +37,41 @@ class Image
      */
     private $annonce;
 
-    public function getId(): ?int
+    public function getId() : ? int
     {
         return $this->id;
     }
 
-    public function getUrl(): ?string
+    public function getUrl() : ? string
     {
         return $this->url;
     }
 
-    public function setUrl(string $url): self
+    public function setUrl(string $url) : self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    public function getCaption(): ?string
+    public function getCaption() : ? string
     {
         return $this->caption;
     }
 
-    public function setCaption(string $caption): self
+    public function setCaption(string $caption) : self
     {
         $this->caption = $caption;
 
         return $this;
     }
 
-    public function getAnnonce(): ?Annonce
+    public function getAnnonce() : ? Annonce
     {
         return $this->annonce;
     }
 
-    public function setAnnonce(?Annonce $annonce): self
+    public function setAnnonce(? Annonce $annonce) : self
     {
         $this->annonce = $annonce;
 

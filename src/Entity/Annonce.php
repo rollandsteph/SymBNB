@@ -3,13 +3,18 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AnnonceRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(
+ *      fields ={"title"},
+ *      message= "Une autre annonce possède déjà ce titre, merci de le modifier")
  */
 class Annonce
 {
@@ -22,6 +27,11 @@ class Annonce
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *      min = 10, 
+     *      max = 255, 
+     *      minMessage = "Le titre doit faire plus de {{ limit }} caractères", 
+     *      maxMessage = "Le titre ne peut pas faire plus de {{ limit }} caractères")
      */
     private $title;
 
@@ -37,6 +47,11 @@ class Annonce
 
     /**
      * @ORM\Column(type="text")
+     *  @Assert\Length(
+     *      min = 100, 
+     *      max = 255, 
+     *      minMessage = "Le titre doit faire plus de {{ limit }} caractères", 
+     *      maxMessage = "Le titre ne peut pas faire plus de {{ limit }} caractères")
      */
     private $introduction;
 
@@ -47,6 +62,7 @@ class Annonce
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Url()
      */
     private $coverImage;
 
@@ -57,6 +73,7 @@ class Annonce
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="annonce", orphanRemoval=true, cascade={"persist","remove"})
+     * @Assert\Valid
      */
     private $images;
 
@@ -65,89 +82,89 @@ class Annonce
         $this->images = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId() : ? int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle() : ? string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(string $title) : self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug() : ? string
     {
         return $this->slug;
     }
 
-    public function setSlug(string $slug): self
+    public function setSlug(string $slug) : self
     {
         $this->slug = $slug;
 
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice() : ? float
     {
         return $this->price;
     }
 
-    public function setPrice(float $price): self
+    public function setPrice(float $price) : self
     {
         $this->price = $price;
 
         return $this;
     }
 
-    public function getIntroduction(): ?string
+    public function getIntroduction() : ? string
     {
         return $this->introduction;
     }
 
-    public function setIntroduction(string $introduction): self
+    public function setIntroduction(string $introduction) : self
     {
         $this->introduction = $introduction;
 
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getContent() : ? string
     {
         return $this->content;
     }
 
-    public function setContent(string $content): self
+    public function setContent(string $content) : self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    public function getCoverImage(): ?string
+    public function getCoverImage() : ? string
     {
         return $this->coverImage;
     }
 
-    public function setCoverImage(string $coverImage): self
+    public function setCoverImage(string $coverImage) : self
     {
         $this->coverImage = $coverImage;
 
         return $this;
     }
 
-    public function getRooms(): ?int
+    public function getRooms() : ? int
     {
         return $this->rooms;
     }
 
-    public function setRooms(int $rooms): self
+    public function setRooms(int $rooms) : self
     {
         $this->rooms = $rooms;
 
@@ -155,24 +172,24 @@ class Annonce
     }
 
     /**
-    *@ORM\PrePersist
-    *@ORM\PreUpdate
-    */
+     *@ORM\PrePersist
+     *@ORM\PreUpdate
+     */
     public function makeSlug()
     {
-        $monSlug=new Slugify();
+        $monSlug = new Slugify();
         $this->setSlug($monSlug->slugify($this->title));
     }
 
     /**
      * @return Collection|Image[]
      */
-    public function getImages(): Collection
+    public function getImages() : Collection
     {
         return $this->images;
     }
 
-    public function addImage(Image $image): self
+    public function addImage(Image $image) : self
     {
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
@@ -182,7 +199,7 @@ class Annonce
         return $this;
     }
 
-    public function removeImage(Image $image): self
+    public function removeImage(Image $image) : self
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);

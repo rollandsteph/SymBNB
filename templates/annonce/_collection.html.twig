@@ -1,0 +1,56 @@
+{# on définit comment va s'afficher le bloc concernant la collection des images 
+donc le conteneur global de tous les champs images #}
+{% block _annonce_images_row %}
+    <div class="card bg-light mb-3">
+        <div class="card-header">Les images de l'annonce</div>
+        <div class="card-body">
+            <p>
+                <i>Ici vous pouvez ajouter vos images</i>
+            </p>
+            {# on positionne une légende globale pour toute la collection (en haut comme une entête de tableau) #}
+            <div class="row">
+                <div class="col">Url de l'image</div>
+                <div class="col">Légende de l'image</div>
+            </div>
+            <p class="card-text">
+                <div class="form-group">
+                    {# ici on parle bien de la collection donc du bloc qui contient toutes les occurences de 'images' (url + caption) #}
+                    {{ form_widget(form) }}
+                    <input type="hidden" id="widgets-counter" value="0">
+                    
+                    <button type="button" id="add-image" class="btn btn-primary">Ajouter une image</button>
+                </div>
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{# on définit comment va s'afficher la row c'est à dire l'intégralité de ce qui concerne une image (label + error + widget )
+et ici on dit que l'on ne veut voir que le widget et les erreurs qui représente une occurrence de la collection #}
+{% block _annonce_images_entry_row %}
+    {# ici la variable "form" représente une occurence de ma collection donc une ImageType 
+    composée des deux champs : url et caption  #}
+    <div class="form-group" id="block_{{id}}">
+        <div class="row">
+            <div class="col-10">
+                <div class="row">
+                    <div class="col">
+                        {# ici on parle du champ (widget) image (url et caption) donc sans les labels
+             et comme j'omets de préciser les labels alors que je défini la "row", ils n'apparaîtront pas #}
+                        {{ form_widget(form.url)}}
+                        {{ form_errors(form.url)}}
+                    </div>
+
+                    <div class="col">
+                        {{ form_widget(form.caption)}}
+                        {{ form_errors(form.caption)}}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <button type="button" data-action="delete" data-target="#block_{{id}}" class="btn btn-danger">X</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

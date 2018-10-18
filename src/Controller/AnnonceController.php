@@ -39,11 +39,11 @@ class AnnonceController extends AbstractController
         $form = $this->createForm(AnnonceType::class, $annonce); // fabrique du formulaire
 
         $form->handleRequest($request); // fait le mapping entre les champs du formulaire avec l'entité passée au formulaire ($annonce)
-        
-        
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             // on fait persister les images saisies dans le formulaire
-            foreach($annonce->getImages() as $image){
+            foreach ($annonce->getImages() as $image) {
                 $image->setAnnonce($annonce);
                 $manager->persist($image);
             }
@@ -51,18 +51,18 @@ class AnnonceController extends AbstractController
             $manager->flush();
             
             // ajout d'un message flash
-            $this->addFlash('success',"L'annonce <strong>{$annonce->getTitle()}</strong> a bien été ajoutée");
+            $this->addFlash('success', "L'annonce <strong>{$annonce->getTitle()}</strong> a bien été ajoutée");
 
             // rediriger vers la route permettant de visualiser l'annonce
-            return $this->redirectToRoute('annonces_show',[
+            return $this->redirectToRoute('annonces_show', [
                 'slug' => $annonce->getSlug() // on passe le paramètre nécessaire à la route qui est le slug
             ]);
         }
         // on retourne la route qui affiche le formulaire en lui passant le formulaire fabriqué
         //et formaté pour être une vue avec la méthode createView()
         return $this->render('annonce/new.html.twig', [
-            'formNewAnnonce' => $form->createView(),
-            'annonce'=> $annonce
+            'formAnnonce' => $form->createView(),
+            'annonce' => $annonce
         ]);
     }
 
@@ -77,6 +77,44 @@ class AnnonceController extends AbstractController
         return $this->render('annonce/show.html.twig', [
             'annonce' => $annonce
         ]);
+    }
+
+    /**
+     * Permet d'afficher l'annonce en formulaire d'édition
+     * 
+     * @Route("/annonces/{slug}/edit", name="annonces_edit")
+     */
+
+    public function edit(Annonce $annonce, Request $request, ObjectManager $manager)
+    {
+        $form = $this->createForm(AnnonceType::class, $annonce); // fabrique du formulaire
+
+        $form->handleRequest($request); // fait le mapping entre les champs du formulaire avec l'entité passée au formulaire ($annonce)
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // on fait persister les images saisies dans le formulaire
+            foreach ($annonce->getImages() as $image) {
+                $image->setAnnonce($annonce);
+                $manager->persist($image);
+            }
+            $manager->persist($annonce);
+            $manager->flush();
+            
+            // ajout d'un message flash
+            $this->addFlash('success', "Les modifications de l'annonce <strong>{$annonce->getTitle()}</strong> a bien été effectuée");
+
+            // rediriger vers la route permettant de visualiser l'annonce
+            return $this->redirectToRoute('annonces_show', [
+                'slug' => $annonce->getSlug() // on passe le paramètre nécessaire à la route qui est le slug
+            ]);
+        }
+        return $this->render(
+            "annonce/edit.html.twig",
+            [
+                'formAnnonce' => $form->createView(),
+                'annonce' => $annonce
+            ]
+        );
     }
 
 }
