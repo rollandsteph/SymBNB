@@ -6,7 +6,9 @@
     <div class="container">
         <h1 class="my-3">Voici les annonces de nos hôtes</h1>
         <div class="row">
-            {% for ad in ads %}
+            {% for ad in ads %} 
+            {# route de l'annonce #}
+                {% set route= path('ads_show', {'slug': ad.slug}) %}
                 <div class="col-md-4">
                     <div class="card bg-light mb-3">
                         {# header de la card #}
@@ -18,18 +20,18 @@
                             <br>
                             <small>Pas encore noté</small>
                         </div>
-                        <a href="{{path('ads_show', {'slug': ad.slug})}}">
+                        <a href="{{route}}">
                             <img src=" {{ ad.coverImage}} " alt="Image de l'appartement" style="height: 200px; width: 100%; display: block">
                         </a>
                         {# corps de la card #}
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a href="{{path('ads_show', {'slug': ad.slug})}}">
+                                <a href="{{route}}">
                                     {{ad.title}}
                                 </a>
                             </h4>
                             <p class="card-text">{{ ad.introduction }}</p>
-                            <a href="{{path('ads_show', {'slug': ad.slug})}}" class="btn btn-secondary">En savoir plus</a>
+                            <a href="{{route}}" class="btn btn-secondary">En savoir plus</a>
                         </div>
                     </div>
                 </div>
