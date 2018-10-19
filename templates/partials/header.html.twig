@@ -16,17 +16,32 @@
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a href="#" class="nav-link">Mon compte</a>
-            </li>
+            {% if app.user %}
+                {# s'il un utilisateur est connecté#}
+                <li class="nav-item">
+                    <a href="{{path('account_logout')}}" class="nav-link">Déconnexion</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('account_profile')}}" class="nav-link">Mon profil</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="{{path('account_login')}}" class="nav-link">Se connecter</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{path('account_register')}}" class="nav-link">S'inscrire</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
 {# gestion des messages flash #}
-{% for label, messages in app.flashes %} {# on parcours chaque type d'image grace au label #}
+{% for label, messages in app.flashes %}
+    {# on parcours chaque type d'image grace au label #}
     <div class="container">
         <div class="alert alert-{{ label }}">
-            {% for message in messages %}  {# on parcours chaque messagepour le label en cours de lecture #}
+            {% for message in messages %}
+                {# on parcours chaque message pour le label en cours de lecture #}
                 <p>{{ message | raw }}</p>
             {% endfor %}
         </div>
