@@ -248,5 +248,8 @@ class User implements UserInterface
 
     public function eraseCredentials(){}
 
-
+    public function getFullName(): ?string
+    {
+        return $this->firstName . " " . $this->lastName;
+    }
 }

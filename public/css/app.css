@@ -20,3 +20,14 @@ div.carousel-caption {
 div.card-body h4.card-title a {
     text-decoration: none;
 }
+
+.avatar{
+    max-width: 128px;
+    max-height: 128px;
+    border-radius: 50%;
+}
+
+.avatar-medium{
+    max-width: 64px;
+    max-height: 64px;
+}
