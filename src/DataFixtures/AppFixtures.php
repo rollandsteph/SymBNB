@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Annonce;
@@ -22,8 +23,27 @@ class AppFixtures extends Fixture
 
         $users=[];
         $genres=['male','female'];
+
+        $adminRole=new Role();
+        $adminRole->setTitle('ROLE_ADMIN');
+
+        $adminUser=new user();
+        $adminUser->setFirstName('Rolland')
+                    ->setLastName('Steph')
+                    ->setEmail('rolland.Steph@gmail.com')
+                    ->setHash($this->encoder->encodePassword($adminUser,'test'))
+                    ->setPicture('https://randomuser.me/api/portraits/men/21.jpg')
+                    ->setIntroduction($faker->sentence())
+                    ->setDescription("<p>" . join("<p></p>", $faker->paragraphs(3)) . "</p>")
+                    ->addUserRole($adminRole);
+                    $manager->persist($adminUser);
+
+
+
+        $manager->persist($adminRole);
+
         // gestion des utilisateurs
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 50; $i++) {
 
             $user = new User();
             $genre=$faker->randomElement($genres);
@@ -50,7 +70,7 @@ class AppFixtures extends Fixture
             $users[]=$user;
         }
         // gestion des annonces
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $annonce = new Annonce();
             $annonce	->setTitle($faker->sentence(5))
                         ->setCoverImage($faker->imageUrl(1000, 350))
