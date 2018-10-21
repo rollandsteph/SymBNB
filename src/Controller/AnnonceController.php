@@ -35,7 +35,7 @@ class AnnonceController extends AbstractController
     public function create(Request $request, ObjectManager $manager)
     {
         $annonce = new Annonce();
-
+        
         $form = $this->createForm(AnnonceType::class, $annonce); // fabrique du formulaire
 
         $form->handleRequest($request); // fait le mapping entre les champs du formulaire avec l'entité passée au formulaire ($annonce)
@@ -47,6 +47,7 @@ class AnnonceController extends AbstractController
                 $image->setAnnonce($annonce);
                 $manager->persist($image);
             }
+            $annonce->setAuthor($this->getUser());
             $manager->persist($annonce);
             $manager->flush();
             

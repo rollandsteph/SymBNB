@@ -50,8 +50,8 @@ class Annonce
      *  @Assert\Length(
      *      min = 100, 
      *      max = 255, 
-     *      minMessage = "Le titre doit faire plus de {{ limit }} caractères", 
-     *      maxMessage = "Le titre ne peut pas faire plus de {{ limit }} caractères")
+     *      minMessage = "L'introduction doit faire plus de {{ limit }} caractères", 
+     *      maxMessage = "L'introduction ne peut pas faire plus de {{ limit }} caractères")
      */
     private $introduction;
 

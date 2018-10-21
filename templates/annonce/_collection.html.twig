@@ -30,7 +30,7 @@ et ici on dit que l'on ne veut voir que le widget et les erreurs qui représente
 {% block _annonce_images_entry_row %}
     {# ici la variable "form" représente une occurence de ma collection donc une ImageType 
     composée des deux champs : url et caption  #}
-    <div class="form-group" id="block_{{id}}">
+    <div class="form-group" id="block_{{id}}"> {# id est une variable connue de twig #}
         <div class="row">
             <div class="col-10">
                 <div class="row">

@@ -44,7 +44,7 @@ class AccountController extends AbstractController
 
     
     /**
-     * Permet d'afficher le formulaire d'inscription
+     * Permet d'afficher le formulaire d'inscription et de s'inscrire
      * 
      * @Route("/register", name="account_register")
      */
@@ -76,7 +76,7 @@ class AccountController extends AbstractController
     }
     
        /**
-     * Permet d'afficher son profile
+     * Permet de mofifier son profil pour un utilisateur connecté
      * 
      * @Route("/profile", name="account_profile")
      */
@@ -100,7 +100,7 @@ class AccountController extends AbstractController
 
     /**
      * Permet de modifier son mot de passe
-     *@Route("/account/password-update", name="account_updatepassword")
+     *@Route("/account/password-update", name="account_password")
      * 
      * @return Response
      */
@@ -133,4 +133,17 @@ class AccountController extends AbstractController
             'form'=> $form->createView()
         ]);
     }
+
+        /**
+         * Permet d'afficher le profil de l'utilisateur connecté
+         * 
+         * @Route("/account", name="account_index")
+         */
+        public function myAccount(){
+
+            $user=$this->getUser();
+            return $this->render('user/index.html.twig',[
+                'user'=>$user
+            ]);
+        }
 }

@@ -1,7 +1,8 @@
 $('#add-image').click(function () {
     //récupération de la valeur de l'input widgets-counter
     // le + devant permet de parser la valeur en int et non en chaine de caractère
-    const index = +$('#widgets-counter').val;
+    const index = +$('#widgets-counter').val();
+    console.log($('#widgets-counter'));
     //recupération du prototype
     const template = $('#annonce_images').data('prototype').replace(/__name__/g, index);
     // on ajoute cette template à la suite des autres
@@ -12,15 +13,17 @@ $('#add-image').click(function () {
     handleDeleteButtons();
 })
 
+// quand on clique sur un bouton supprimer
 function handleDeleteButtons() {
     $('button[data-action="delete"]').click(function () {
-        const target = this.dataset.target;
-        $(target).remove();
+        const target = this.dataset.target; // on récupère l'id de la div à supprimer
+        console.log(target);
+        $(target).remove(); // on supprime la div
     })
 }
 function updateCounter(){
     const count= +$('#annonce-images div.form-group').length;
-    $('#widget-counter').val(count);
+    $('#widgets-counter').val(count);
 }
 
 updateCounter();
