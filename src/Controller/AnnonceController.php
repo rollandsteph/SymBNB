@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AnnonceController extends AbstractController
@@ -29,7 +31,7 @@ class AnnonceController extends AbstractController
     /**
      * Permet de créer une annonce
      * @Route("/annonces/new", name="annonces_create")
-     *
+     * @IsGranted("ROLE_USER")
      * @return void
      */
     public function create(Request $request, ObjectManager $manager)
@@ -43,10 +45,10 @@ class AnnonceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // on fait persister les images saisies dans le formulaire
-            foreach ($annonce->getImages() as $image) {
+            /*foreach ($annonce->getImages() as $image) {
                 $image->setAnnonce($annonce);
                 $manager->persist($image);
-            }
+            }*/
             $annonce->setAuthor($this->getUser());
             $manager->persist($annonce);
             $manager->flush();
@@ -84,6 +86,7 @@ class AnnonceController extends AbstractController
      * Permet d'afficher l'annonce en formulaire d'édition
      * 
      * @Route("/annonces/{slug}/edit", name="annonces_edit")
+     * @Security("is_granted('ROLE_USER') and user === annonce.getAuthor()", message = "cette annonce ne vous appartient pas, vous ne pouvez pas la modifier ! ")
      */
 
     public function edit(Annonce $annonce, Request $request, ObjectManager $manager)
@@ -94,10 +97,10 @@ class AnnonceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // on fait persister les images saisies dans le formulaire
-            foreach ($annonce->getImages() as $image) {
+            /*foreach ($annonce->getImages() as $image) {
                 $image->setAnnonce($annonce);
                 $manager->persist($image);
-            }
+            }*/
             $manager->persist($annonce);
             $manager->flush();
             
@@ -118,4 +121,21 @@ class AnnonceController extends AbstractController
         );
     }
 
+        /**
+     * permet de supprimer une annonce
+     *
+     * @Route("/annonces/{slug}/delete", name="annonces_delete")
+     * @Security("is_granted('ROLE_USER') and user == annonce.getAuthor()", message="Vous n'avez pas le droit du supprimer cette annonce")
+     * @return void
+     */
+    public function delete(Annonce $annonce,ObjectManager $manager)
+    {
+        $manager->remove($annonce);
+        $manager->flush();
+        
+        // ajout d'un message flash
+        $this->addFlash('success', "La suppression de l'annonce <strong>{$annonce->getTitle()}</strong> a bien été effectuée");
+
+        return $this->redirectToRoute('annonces_index');
+    }
 }

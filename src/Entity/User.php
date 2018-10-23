@@ -239,7 +239,20 @@ class User implements UserInterface
     }
 
     public function getRoles(){
-        return ['ROLE_USER'];
+
+        // doit renvoyer une tableau de string
+        // on fait appel à la fonction map qui parcourt chaque objet de l'array collection userRoles renvoyé par le getUserRoles
+        // et en extrait le "title" avec le getTitle
+        // ce qui nous donne au final un array collection ne contenant que le title de chaque role
+        // on le transforme en simple array grace à la fonction toArray afin d'obtenir une simple liste de strings
+        $roles=$this->getUserRoles()->map(function($role){
+            return $role->getTitle();
+        })->toArray();
+        // et on y ajoute le role_user que tout le monde possède
+        $roles[]='ROLE_USER';
+        // retourne l'ensemble des roles
+        return $roles;
+
     }
 
     public function getPassword(){
