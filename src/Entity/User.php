@@ -90,10 +90,16 @@ class User implements UserInterface
      */
     private $userRoles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="booker")
+     */
+    private $bookings;
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
         $this->userRoles = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -241,7 +247,8 @@ class User implements UserInterface
     public function getRoles(){
 
         // doit renvoyer une tableau de string
-        // on fait appel à la fonction map qui parcourt chaque objet de l'array collection userRoles renvoyé par le getUserRoles
+        // on fait appel à la fonction map qui parcourt chaque objet de l'array collection 
+        //userRoles renvoyé par le getUserRoles
         // et en extrait le "title" avec le getTitle
         // ce qui nous donne au final un array collection ne contenant que le title de chaque role
         // on le transforme en simple array grace à la fonction toArray afin d'obtenir une simple liste de strings
@@ -295,6 +302,37 @@ class User implements UserInterface
         if ($this->userRoles->contains($userRole)) {
             $this->userRoles->removeElement($userRole);
             $userRole->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Booking[]
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setBooker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->contains($booking)) {
+            $this->bookings->removeElement($booking);
+            // set the owning side to null (unless already changed)
+            if ($booking->getBooker() === $this) {
+                $booking->setBooker(null);
+            }
         }
 
         return $this;

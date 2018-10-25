@@ -14,7 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AccountController extends AbstractController
@@ -27,7 +29,8 @@ class AccountController extends AbstractController
     public function login(AuthenticationUtils $utils)
     {
         $errors=$utils->getLastAuthenticationError(); // récupère les erreurs d'authentification
-        $username=$utils->getLastUsername();// récupère le username de l'utilisateur qui tente de se connecter pour le réinjecter dans le formulaire
+        $username=$utils->getLastUsername();// récupère le username de l'utilisateur qui tente 
+        //de se connecter pour le réinjecter dans le formulaire
 
         return $this->render('account/login.html.twig',[
             'hasError'=> $errors !== null,
@@ -118,7 +121,8 @@ class AccountController extends AbstractController
 
             $user=$this->getUser(); // recherche le user connecté
             
-            if($encoder->isPasswordValid($user,$passwordUpdate->getOldPassword()) ){ // on compare l'ancien mot de passe saisi dans le formulaire avec le mot de passe actuel
+            // on compare l'ancien mot de passe saisi dans le formulaire avec le mot de passe actuel
+            if($encoder->isPasswordValid($user,$passwordUpdate->getOldPassword()) ){ 
                 $hashNouveau=$encoder->encodePassword($user,$passwordUpdate->getNewPassword());// on encode le nouveau mot de passe
                 $user->setHash($hashNouveau) ; // on affecte le nouveau mot de passe encodé
                 $manager->persist($user);

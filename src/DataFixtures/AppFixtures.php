@@ -7,6 +7,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Annonce;
+use App\Entity\Booking;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -43,7 +44,7 @@ class AppFixtures extends Fixture
         $manager->persist($adminRole);
 
         // gestion des utilisateurs
-        for ($i = 1; $i <= 50; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
 
             $user = new User();
             $genre=$faker->randomElement($genres);
@@ -67,10 +68,10 @@ class AppFixtures extends Fixture
                     ->setHash($hash);
 
             $manager->persist($user);
-            $users[]=$user;
+            $users[]=$user; // on ajoute le user créé dans un tableau de user
         }
         // gestion des annonces
-        for ($i = 1; $i <= 100; $i++) {
+        for ($i = 1; $i <= 50; $i++) {
             $annonce = new Annonce();
             $annonce	->setTitle($faker->sentence(5))
                         ->setCoverImage($faker->imageUrl(1000, 350))
@@ -88,6 +89,22 @@ class AppFixtures extends Fixture
                         ->setUrl($faker->imageUrl());
                 $manager->persist($image);
 
+            }
+            // gestion des réservations
+            for($j = 1; $j<= mt_rand(0,10); $j++ ){
+                $duration=mt_rand(3,10); // durée de la réservation
+
+                $booking=new Booking();
+                $booking	->setCreatedAt($faker->dateTimeBetween('-6 months')) // trouve une date d'annonce entre aujourd'hui et il y a 6 mois
+                            ->setStartDate($faker->dateTimeBetween('-3 months'))
+                //on prend la startDate que l'on clone (pour qu'elle ne soit pas modifiée) et à laquelle on ajoute la duration
+                // pour trouver la date de fin
+                            ->setEndDate((clone $booking->getStartDate())->modify("+$duration days"))
+                            ->setAmount($annonce->getPrice()*$duration) // on calcul le montant
+                            ->setBooker($users[mt_rand(0, count($users)-1)]) // on affecte un user au hasard
+                            ->setAnnonce($annonce);
+
+                $manager->persist($booking);
             }
             $manager->persist($annonce);
         }
