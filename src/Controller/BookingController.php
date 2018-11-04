@@ -8,12 +8,14 @@ use App\Form\BookingType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BookingController extends AbstractController
 {
     /**
      * @Route("/annonces/{slug}/book", name="booking_create")
+     * @IsGranted("ROLE_USER")
      */
     public function book(Annonce $annonce, Request $request, ObjectManager $manager)
     {
@@ -24,20 +26,41 @@ class BookingController extends AbstractController
 
         if( $form->isSubMitted() && $form->isValid() ){
             
-            $manager->persist($booking);
-            $manager->flush();
+            $booking->setAnnonce($annonce)
+                    ->setBooker($this->getUser());
+            // si les dates sont possibles
+            if($booking->isBookableDates()){
+                
+                $manager->persist($booking);
+                $manager->flush();
+                // rediriger vers la route permettant de visualiser l'annonce
+                return $this->redirectToRoute('booking_show', [
+                    'id' => $booking->getId(), // on passe le paramètre nécessaire à la route qui est le slug
+                    'withAlert' => true
+                ]);
+            }else
+            {
+                $this->addFlash('warning', "Le bien est déjà réservé durant l'un des jours proposés. Veuillez modifier vos dates");
+            }
 
-            $this->addFlash('success', "Votre réservation a bien été enregistrée.");
-
-            // rediriger vers la route permettant de visualiser l'annonce
-            return $this->redirectToRoute('annonces_show', [
-                'slug' => $annonce->getSlug() // on passe le paramètre nécessaire à la route qui est le slug
-            ]);
         }
 
         return $this->render('booking/book.html.twig', [
             'annonce'=>$annonce,
             'form'=>$form->createView()
         ]);
+    }
+/**
+ * Permet d'afficher la page de réservation
+ * 
+ *@Route("/booking/{id}", name="booking_show")
+ * @param Booking $booking
+ * @return Response
+ */
+    public function show(Booking $booking)
+    {
+        return $this->render('booking/show.html.twig',[
+            'booking'=>$booking
+            ]);
     }
 }

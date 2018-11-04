@@ -102,6 +102,7 @@ class AppFixtures extends Fixture
                             ->setEndDate((clone $booking->getStartDate())->modify("+$duration days"))
                             ->setAmount($annonce->getPrice()*$duration) // on calcul le montant
                             ->setBooker($users[mt_rand(0, count($users)-1)]) // on affecte un user au hasard
+                            ->setComment($faker->paragraph())
                             ->setAnnonce($annonce);
 
                 $manager->persist($booking);

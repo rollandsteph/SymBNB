@@ -266,4 +266,32 @@ class Annonce
 
         return $this;
     }
+
+    /**
+     * Permet d'obtenir un tableau des jours qui ne sont pas disponibles pour cette annonce
+     *
+     * @return array // un tableau d'objets DateTime représentant les jours d'occupation
+     */
+    public function getNotAvailableDays(){
+        $noteAvailableDays=[];
+        foreach($this->bookings as $booking){
+            // calculer les jours entre la date d'arrivée et de départ
+            //resultat contient donc une liste de jour au format timestamp
+            $resultat=range($booking->getStartDate()->getTimestamp(),
+                            $booking->getEndDate()->getTimestamp(),
+                            24*60*60);
+
+            // array_map transforme un tableau en ce même tableau mais formaté différemment
+            // par une fonction(closure) qu'on lui passe en paramètre
+            // objectif : tranformer le tableau de timestamp en tableau de DateTime
+            $days=array_map(function($dayTimestamp){
+                return new \DateTime(date('Y-m-d',$dayTimestamp));
+            }, $resultat);
+
+            // on ajoute les jours du tableau concernant le booking en cours
+            // au tableau général de tous les jours de l'annonce
+            $noteAvailableDays=array_merge($noteAvailableDays,$days);
+        }
+        return $noteAvailableDays;
+    }
 }
