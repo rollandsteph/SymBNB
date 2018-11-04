@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class BookingController extends AbstractController
 {
     /**
+     * Enregistre une réservation sur une annonce
+     * 
      * @Route("/annonces/{slug}/book", name="booking_create")
      * @IsGranted("ROLE_USER")
      */
