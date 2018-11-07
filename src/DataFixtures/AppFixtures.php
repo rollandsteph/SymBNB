@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Annonce;
 use App\Entity\Booking;
+use App\Entity\Comment;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -106,6 +107,15 @@ class AppFixtures extends Fixture
                             ->setAnnonce($annonce);
 
                 $manager->persist($booking);
+                // ajout de commentaire
+                if(mt_rand(0,1)){
+                    $comment=new Comment();
+                    $comment->setContent($faker->paragraph(3,true))
+                            ->setAuthor($booking->getBooker())
+                            ->setRating(mt_rand(1,5))
+                            ->setAnnonce($booking->getAnnonce());
+                    $manager->persist($comment);
+                }
             }
             $manager->persist($annonce);
         }

@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Annonce;
 use App\Entity\Booking;
+use App\Entity\Comment;
 use App\Form\BookingType;
+use App\Form\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,7 +40,7 @@ class BookingController extends AbstractController
                 // rediriger vers la route permettant de visualiser l'annonce
                 return $this->redirectToRoute('booking_show', [
                     'id' => $booking->getId(), // on passe le paramètre nécessaire à la route qui est le slug
-                    'withAlert' => true
+                    'withAlert' => true // permet d'afficher une alerte uniquement lorsque l'on vient de réserver
                 ]);
             }else
             {
@@ -59,10 +61,25 @@ class BookingController extends AbstractController
  * @param Booking $booking
  * @return Response
  */
-    public function show(Booking $booking)
+    public function show(Booking $booking,Request $request, ObjectManager $manager)
     {
+        $comment=new Comment();
+        $form=$this->createForm(CommentType::class,$comment);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $comment->setAuthor($this->getUser())
+                    ->setAnnonce($booking->getAnnonce());
+            $manager->persist($comment);
+            $manager->flush();
+
+            $this->addFlash('success','Votre commentaire a bien été pris en compte !');
+
+        }
         return $this->render('booking/show.html.twig',[
-            'booking'=>$booking
+            'booking'=>$booking,
+            'formComment'=>$form->createView()
             ]);
     }
 }

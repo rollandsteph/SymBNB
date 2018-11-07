@@ -13,6 +13,18 @@
             <div class="row mt-5">
                 <div class="col-4">
                     <img src="{{booking.annonce.coverImage}}" alt="Photo de l'annonce {{ booking.annonce.title}}" class="img-fluid">
+                    <div class="mt-3">
+                        {% set comment = booking.getAnnonce().getCommentFromAuthor(app.user) %}
+                        {% if comment is null %}
+                            Vous n'avez pas encore noté votre voyage ! <br>
+                            <a href="{{path('booking_show', {'id': booking.id } ) }}#comment" class="btn btn-link pl-0">Je donne mon avis</a>
+                        {% else %}
+                            votre note :
+                            {% include 'partials/rating.html.twig' with {
+                                'rating' : comment.rating
+                            } %}
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="col-8">
                     <h4>{{booking.annonce.title}}</h4>
@@ -22,8 +34,8 @@
                         {{booking.startDate|date('d/m/Y')}}
                         au
                         {{booking.endDate|date('d/m/Y')}}
-                        ({{booking.amount}}
-                        &euro;</p>
+                        ({{booking.amount}}) &euro;</p>
+
                     <a href="{{path('booking_show', {'id': booking.id } ) }}" class="btn btn-info">Plus d'informations</a>
                 </div>
             </div>

@@ -9,7 +9,21 @@
             <strong>{{ annonce.price }}
                 &euro; /nuit</strong>
             <br>
-            <small>Pas encore noté</small>
+            <small>
+                {% set nbComments = annonce.comments | length %}
+                {% if nbComments > 0 %}
+                    {% include 'partials/rating.html.twig' with {
+                        'rating' : annonce.getAvgRatings
+                    } %}
+                    <br>
+                    <span>{{ nbComments }}
+                        commentaire{% if nbComments > 1 %}s{% endif %}
+                        </span>
+                {% else %}
+                    Pas encore noté
+                {% endif %}
+
+            </small>
         </div>
         <a href="{{route}}">
             <img src=" {{ annonce.coverImage}} " alt="Image de l'appartement" style="height: 200px; width: 100%; display: block">

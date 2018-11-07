@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\User;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -88,10 +89,47 @@ class Annonce
      */
     private $bookings;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="annonce", orphanRemoval=true)
+     */
+    private $comments;
+
+    /**
+     * permet de renvoyer la moyenne des notes des commentaires
+     *
+     * @return float
+     */
+    public function getAvgRatings(){
+        // on va faire la somme des valeurs de notation de l'ensemble des comments
+        // pour cela on utilise array_reduce qui va réduire le tableau à une seule valeur
+        // mais comments étant un arrayCollection et non un simple array
+        // on utilise la méthode toArray pour le transformer en simple Array
+        // le 0 en 3eme paramètre est la valeur par défaut car on doit avoir une valeur initial pour le cumul !
+        $sum=array_reduce($this->comments->toArray(),function($total,$comment){
+            return $total+$comment->getRating();
+        },0);
+        if(count($this->comments)>0) return $sum/count($this->comments);
+        return 0; // retourne 0 dans le cas d'aucun commentaire
+    }
+
+    /**
+     * retourne le commentaire d'un auteur sur cette annonce ou renvoi null
+     *
+     * @param User $author
+     * @return Comment|null
+     */
+    public function getCommentFromAuthor(User $author){
+        foreach($this->comments as $comment){
+            if($comment->getAuthor() === $author) return $comment;
+        }
+        return null;
+    }
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId() : ? int
@@ -293,5 +331,36 @@ class Annonce
             $noteAvailableDays=array_merge($noteAvailableDays,$days);
         }
         return $noteAvailableDays;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setAnnonce($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getAnnonce() === $this) {
+                $comment->setAnnonce(null);
+            }
+        }
+
+        return $this;
     }
 }
