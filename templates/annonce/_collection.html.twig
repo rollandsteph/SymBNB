@@ -8,17 +8,18 @@ donc le conteneur global de tous les champs images #}
                 <i>Ici vous pouvez ajouter vos images</i>
             </p>
             {# on positionne une légende globale pour toute la collection (en haut comme une entête de tableau) #}
-            <div class="row">
-                <div class="col">Url de l'image</div>
-                <div class="col">Légende de l'image</div>
-            </div>
+            <div class="row col-10" id="titreCol">
+                <div class="col text-center">Url de l'image</div>
+                <div class="col text-center">Légende de l'image</div>
+                
+            </div><hr>
             <p class="card-text">
                 <div class="form-group">
                     {# ici on parle bien de la collection donc du bloc qui contient toutes les occurences de 'images' (url + caption) #}
                     {{ form_widget(form) }}
                     <input type="hidden" id="widgets-counter" value="0">
                     
-                    <button type="button" id="add-image" class="btn btn-primary">Ajouter une image</button>
+                    <button type="button" id="add-image" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter une image</button>
                 </div>
             </p>
         </div>
@@ -32,23 +33,23 @@ et ici on dit que l'on ne veut voir que le widget et les erreurs qui représente
     composée des deux champs : url et caption  #}
     <div class="form-group" id="block_{{id}}"> {# id est une variable connue de twig #}
         <div class="row">
-            <div class="col-10">
+            <div class="col-8">
                 <div class="row">
-                    <div class="col">
+                    <div class="col px-1">
                         {# ici on parle du champ (widget) image (url et caption) donc sans les labels
              et comme j'omets de préciser les labels alors que je défini la "row", ils n'apparaîtront pas #}
                         {{ form_widget(form.url)}}
                         {{ form_errors(form.url)}}
                     </div>
 
-                    <div class="col">
+                    <div class="col px-1">
                         {{ form_widget(form.caption)}}
                         {{ form_errors(form.caption)}}
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <button type="button" data-action="delete" data-target="#block_{{id}}" class="btn btn-danger">X</button>
+            <div class="col px-1">
+                <button type="button" data-action="delete" data-target="#block_{{id}}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
             </div>
         </div>
     </div>

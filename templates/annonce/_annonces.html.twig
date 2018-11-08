@@ -6,7 +6,7 @@
         <div class="card-header text-center">
             {{ annonce.rooms }}
             chambre(s),
-            <strong>{{ annonce.price }}
+            <strong>{{ annonce.price  | number_format(2,',',' ')  }}
                 &euro; /nuit</strong>
             <br>
             <small>
@@ -36,7 +36,7 @@
                 </a>
             </h4>
             <p class="card-text">{{ annonce.introduction }}</p>
-            <a href="{{route}}" class="btn btn-secondary">En savoir plus</a>
+            <a href="{{route}}" class="btn btn-primary float-right">En savoir plus</a>
             {% if app.user and annonce.author is same as(app.user) %}
                 <a href="{{ path('annonces_edit', {'slug': annonce.slug })}}" class="btn btn-secondary">Modifier</a>
             {% endif %}

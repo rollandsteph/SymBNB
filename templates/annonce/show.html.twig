@@ -8,26 +8,15 @@
 
     <div class="ad-title" style="background-image: url( {{ annonce.coverImage}} )">
         <div class="container">
-            <h1>
-                {{annonce.title}}
-            </h1>
-            <p>
-                {{annonce.introduction}}
-            </p>
+            <h1>{{annonce.title}}</h1>
+            <p>{{annonce.introduction}}</p>
             <p class="h2">
-                <strong>{{annonce.rooms}}
-                    chambres</strong>
-                pour
-                <strong>{{annonce.price}}
-                    &euro;
-                </strong>
-                par nuit
+                <strong>{{annonce.rooms}} chambres </strong>pour<strong>{{annonce.price | number_format(2,',',' ') }} &euro;</strong>par nuit
             </p>
             <a href="{{ path('booking_create', {'slug': annonce.slug }) }}" class="btn btn-primary">Réserver !</a>
             {% if app.user and annonce.author is same as(app.user) %}
                 <a href="{{ path('annonces_edit', {'slug': annonce.slug })}}" class="btn btn-secondary">Modifier l'annonce</a>
                 <a href="{{ path('annonces_delete', {'slug': annonce.slug })}}" class="btn btn-danger" onclick="return confirm(`Etes vous sur de vouloir supprimer cette annonce : {{ annonce.title }} ?`)">Supprimer l'annonce</a>
-
             {% endif %}
         </div>
     </div>

@@ -13,6 +13,12 @@ div.ad-title {
     background-position: center center;
 }
 
+div.ad-title .btn{
+    margin-top:2em;
+    font-size: 1.5em;
+    line-height: 1.5em;
+}
+
 div.carousel-caption {
     text-shadow:3px 3px 3px rgba(0,0,0,0.5);
 }
@@ -33,9 +39,10 @@ div.card-body h4.card-title a {
 }
 
 .avatar-mini{
-    max-width: 24px;
-    max-height: 24px;
+    max-width: 35px;
+    max-height: 35px;
 }
+
 
 .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
     color: firebrick !important
@@ -43,4 +50,12 @@ div.card-body h4.card-title a {
 
 span.rating i{
     color:goldenrod;
+}
+
+.alert a{
+    text-decoration: none;
+}
+
+.alert .btn{
+    color: white;
 }
