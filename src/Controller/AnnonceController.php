@@ -25,7 +25,7 @@ class AnnonceController extends AbstractController
     public function index(AnnonceRepository $repo)
     {
         $annonces = $repo->findAll();
-        return $this->render('annonce/index.html.twig', [
+        return $this->render('annonce/listAnnonces.html.twig', [
             'annonces' => $annonces
         ]);
     }
@@ -39,6 +39,7 @@ class AnnonceController extends AbstractController
     public function create(Request $request, ObjectManager $manager)
     {
         $annonce = new Annonce();
+        $annonce->setAuthor($this->getUser()); // on définit déja l'auteur connecté
         
         $form = $this->createForm(AnnonceType::class, $annonce); // fabrique du formulaire
 
@@ -46,12 +47,7 @@ class AnnonceController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // on fait persister les images saisies dans le formulaire
-            /*foreach ($annonce->getImages() as $image) {
-                $image->setAnnonce($annonce);
-                $manager->persist($image);
-            }*/
-            $annonce->setAuthor($this->getUser());
+            // on fait persister les images saisies dans le formulaire via une annotation dans l'entity (persist)
             
             $manager->persist($annonce);
             $manager->flush();
@@ -100,10 +96,7 @@ class AnnonceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // on fait persister les images saisies dans le formulaire
-            /*foreach ($annonce->getImages() as $image) {
-                $image->setAnnonce($annonce);
-                $manager->persist($image);
-            }*/
+
             $manager->persist($annonce);
             $manager->flush();
             

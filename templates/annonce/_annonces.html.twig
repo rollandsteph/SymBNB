@@ -35,7 +35,7 @@
                     {{annonce.title}}
                 </a>
             </h4>
-            <p class="card-text">{{ annonce.introduction }}</p>
+            <p class="card-text">{{ annonce.introduction|raw }}</p>
             <a href="{{route}}" class="btn btn-primary float-right">En savoir plus</a>
             {% if app.user and annonce.author is same as(app.user) %}
                 <a href="{{ path('annonces_edit', {'slug': annonce.slug })}}" class="btn btn-secondary">Modifier</a>

@@ -3,9 +3,10 @@
     Création d'une annonce
 {% endblock %}
 {# on précise ici qu'il va falloir utiliser un thème pour le formulaire "formNewAnnonce" qui est dans ce fichier #}
-{% form_theme formAnnonce 'annonce/_collection.html.twig' %}
 
 {% block body %}
+{% form_theme formAnnonce 'annonce/_collection.html.twig' %}
+
     <div class="container">
         <h1 class="my-5">Créer une nouvelle annonce</h1>
         {{form_start(formAnnonce)}}
@@ -30,7 +31,7 @@
                 <div class="alert alert-light">
                     <h2>Images de l'annonce</h2>
                     {{form_row(formAnnonce.coverImage)}}
-                    {{form_row(formAnnonce.images)}} {# ici le sous formulaire des images de l'annonce#}
+                    {{form_row(formAnnonce.images)}} {# ici le sous formulaire des images de l'annonce voir le fichier _collection.html.twig#}
                 </div>
             </div>
         </div>

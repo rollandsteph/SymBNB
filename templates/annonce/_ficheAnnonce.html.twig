@@ -1,0 +1,53 @@
+{% form_theme formAnnonce 'annonce/_collection.html.twig' %}
+
+{% if mode == "new" %}
+    {% set titre = "création d'une nouvelle annonce" %}
+    {% set titre = "Créer l'annonce" %}
+{% else %}
+    {% set titre = "Détail de l'annonce" %}
+    {% set titre = "Modifier l'annonce" %}
+{% endif %}
+
+<div class="container">
+    {% if mode == "new" %}
+        <h1 class="my-5">{{ titre }}
+        </h1>
+    {% endif %}
+
+    <div class="row">
+        <div class="col">
+            <div class="card border-primary mb-3">
+                <div class="card-header">Informations générales</div>
+                <div class="card-body">
+                    {{form_row(formAnnonce.title)}}
+                    {{form_row(formAnnonce.slug)}}
+                    {{form_row(formAnnonce.price)}}
+                    {{form_row(formAnnonce.rooms)}}
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-primary mb-3">
+                <div class="card-header">Image principale de l'annonce</div>
+                <div class="card-body">
+                    {{form_row(formAnnonce.coverImage)}}
+                    {% if mode == "edit" %}<img class="img-fluid" src="{{annonce.coverImage}}" alt="">
+                    {% else %}<img src="http://placehold.it/200x200" alt="">{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card border-primary mb-3 ">
+                <div class="card-header">Détail de l'annonce</div>
+                <div class="card-body">
+                    {{form_row(formAnnonce.introduction)}}
+                    {{form_row(formAnnonce.content|raw)}}
+                    {{form_row(formAnnonce.images)}}
+                    {# ici le sous formulaire des images de l'annonce#}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

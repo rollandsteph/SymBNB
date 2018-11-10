@@ -1,4 +1,18 @@
 {
-  "ftp://serverbtssiojv.ddns.net:21@admin": {},
+  "ftp://serverbtssiojv.ddns.net:21@admin": {
+    "demo": {
+      "SymBNB": {
+        "var": {
+          "cache": {
+            "dev": {
+              "profiler": {
+                "0a": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "$version": 1
 }

@@ -1,0 +1,62 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}
+    Modification d'une annonce
+{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {{form_start(formAnnonce)}}
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Détail de l'annonce</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Les réservations</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Les commentaires</a>
+            </div>
+        </nav>
+        {# l'onglet des informations de l'annonce #}
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                {# on inclus le fichier représentant la fiche annonce #}
+                {% include 'annonce/_ficheAnnonce.html.twig' with {
+                    'mode' : 'edit'
+                } %}</div>
+
+            {# l'onglet des réservations de l'annonce #}
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                {# on inclus le fichier représentant la liste des réservations #}
+                {% include 'booking/_listBookings.html.twig' %}
+            </div>
+
+            {# l'onglet des commentaires de l'annonce #}
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                {# on inclus le fichier représentant la liste des commentaires #}
+                {% include 'comment/_listComments.html.twig' %}
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success btn-lg btn-block">
+        <i class="fas fa-check"></i>
+        Modifier l'annonce</button>
+    {{form_end(formAnnonce)}}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{# <script src="/ckeditor/adapters/jquery.js" type="text/javascript"></script> #}
+<script src="/ckeditor/ckeditor.js" type="text/javascript"></script>
+
+<script src="/js/ad.js"></script>
+<script>
+    {
+        /*$(function () {
+                $('texarea.ckeditor').ckeditor();
+            })*/
+    } {
+        /* CKEDITOR.replace('$(' texarea.ckeditor ')'); */
+
+    }
+</script>
+{% endblock %}

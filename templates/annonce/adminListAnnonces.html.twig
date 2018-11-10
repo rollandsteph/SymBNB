@@ -1,0 +1,50 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des annonces{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h1 class="my-5">Gestion des annonces</h1>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">Id</th>
+                    <th>Titre</th>
+                    <th>Auteur</th>
+                    <th class="text-center">Réservations</th>
+                    <th class="text-center">Note</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for annonce in annonces %}
+                    <tr>
+                        <td class="align-middle">{{annonce.id}}
+                        </td>
+                        <td class="align-middle">{{annonce.title}}
+                        </td>
+                        <td class="align-middle"><img src="{{annonce.author.picture}}" alt="Avatar de {{annonce.author.fullName}} " class="avatar avatar-mini">  {{annonce.author.fullName}}
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="badge badge-primary rounded ">{{annonce.bookings|length}}</span> 
+                        </td>
+                        <td><div class="mx-auto text-center">{% include 'partials/rating.html.twig' with {
+                                'rating' : annonce.getAvgRatings
+                            } %}</div>
+                            <div class="mx-auto text-center"><span class="badge badge-success rounded  ">{{annonce.getAvgRatings|number_format(1,',',' ')}}</span></div>
+                        </td>
+                        {# colonne action #}
+                        <td>
+                            <a href="{{path('admin_annonce_edit',{'id': annonce.id })}} " class="btn btn-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{path('admin_annonce_delete', {'id': annonce.id})}}  " class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

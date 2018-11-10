@@ -24,8 +24,8 @@ class AnnonceType extends ApplicationType
             ->add('title',TextType::class,$this->setConfiguration('Titre',"Saisir le titre de l'annonce"))
             ->add('slug',TextType::class,$this->setConfiguration("Slug","Saisir le slug de l'annonce",['required'=>false]))
             ->add('price',MoneyType::class,$this->setConfiguration("Prix","Saisir le prix par nuit"))
-            ->add('introduction',TextType::class,$this->setConfiguration('Introduction',"Saisir l'introduction de l'annonce"))
-            ->add('content',TextareaType::class,$this->setConfiguration('Contenu',"Saisir le contenu de l'annonce"))
+            ->add('introduction',TextareaType::class,$this->setConfiguration('Introduction',"Saisir l'introduction de l'annonce",['attr'=>['class'=>"ckeditor"]]))
+            ->add('content',TextareaType::class,$this->setConfiguration('Contenu',"Saisir le contenu de l'annonce",['attr'=>['class'=>"ckeditor"]]))
             ->add('coverImage',UrlType::class,$this->setConfiguration("Url de l'image","Saisir l'adresse de l'image"))
             ->add('rooms',IntegerType::class,$this->setConfiguration("Nombre de chambres","Saisir le nombre de chambres"))
             ->add('images', CollectionType::class,[

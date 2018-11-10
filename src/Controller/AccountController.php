@@ -31,7 +31,7 @@ class AccountController extends AbstractController
         $errors=$utils->getLastAuthenticationError(); // récupère les erreurs d'authentification
         $username=$utils->getLastUsername();// récupère le username de l'utilisateur qui tente 
         //de se connecter pour le réinjecter dans le formulaire
-
+        
         return $this->render('account/login.html.twig',[
             'hasError'=> $errors !== null,
             'username'=> $username

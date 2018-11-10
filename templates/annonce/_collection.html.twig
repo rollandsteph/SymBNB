@@ -1,25 +1,43 @@
 {# on définit comment va s'afficher le bloc concernant la collection des images 
 donc le conteneur global de tous les champs images #}
+
 {% block _annonce_images_row %}
+    {#  Attention la variable ci-dessous doit être déclarée dans ce bloc et non dans un autre bloc sinon elle ne sera pas connue ! #}
+    {% if app.request.attributes.get('annonce') is null %}
+        {% set author = "" %}
+    {% else %}
+        {% set author = app.request.attributes.get('annonce').author %}
+    {% endif %}
+    {{dump()}}
     <div class="card bg-light mb-3">
         <div class="card-header">Les images de l'annonce</div>
         <div class="card-body">
             <p>
-                <i>Ici vous pouvez ajouter vos images</i>
+                {% if app.user is same as(author) %}
+                    <i>Ici vous pouvez ajouter vos images</i>
+                {% endif %}
             </p>
             {# on positionne une légende globale pour toute la collection (en haut comme une entête de tableau) #}
             <div class="row col-10" id="titreCol">
                 <div class="col text-center">Url de l'image</div>
                 <div class="col text-center">Légende de l'image</div>
-                
+
             </div><hr>
             <p class="card-text">
                 <div class="form-group">
                     {# ici on parle bien de la collection donc du bloc qui contient toutes les occurences de 'images' (url + caption) #}
                     {{ form_widget(form) }}
                     <input type="hidden" id="widgets-counter" value="0">
-                    
-                    <button type="button" id="add-image" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter une image</button>
+                    {# ici je test si le user connecté (qui a seul le droit d'ajouter des images) est celui de l'annonce
+                effectivement ici je n'ai pas accès à la variable annonce car je ne suis pas dans le formulaire principal dans lequel j'ai effectivement passé
+                le variable annonce avec mon controller
+                je fais donc appel ici à la variable que je peux récupérer via l'objet request dans les attributs ! #}
+                    {% if app.user is same as(author) %}
+                        <button type="button" id="add-image" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Ajouter une image</button>
+                    {% endif %}
+
                 </div>
             </p>
         </div>
@@ -31,7 +49,8 @@ et ici on dit que l'on ne veut voir que le widget et les erreurs qui représente
 {% block _annonce_images_entry_row %}
     {# ici la variable "form" représente une occurence de ma collection donc une ImageType 
     composée des deux champs : url et caption  #}
-    <div class="form-group" id="block_{{id}}"> {# id est une variable connue de twig #}
+    <div class="form-group" id="block_{{id}}">
+        {# id est une variable connue de twig #}
         <div class="row">
             <div class="col-8">
                 <div class="row">
@@ -49,7 +68,9 @@ et ici on dit que l'on ne veut voir que le widget et les erreurs qui représente
                 </div>
             </div>
             <div class="col px-1">
-                <button type="button" data-action="delete" data-target="#block_{{id}}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                <button type="button" data-action="delete" data-target="#block_{{id}}" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
             </div>
         </div>
     </div>
