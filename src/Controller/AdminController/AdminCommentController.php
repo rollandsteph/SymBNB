@@ -35,6 +35,8 @@ class AdminCommentController extends AbstractController
      */
     public function editComment(Comment $comment, Request $request, ObjectManager $manager ){
 
+        dump($request->query->get('target'));
+        $target="";
         $form=$this->createForm(CommentEditType::class,$comment);
 
         $form->handleRequest($request);

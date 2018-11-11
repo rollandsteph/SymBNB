@@ -42,14 +42,15 @@ class AdminAnnonceController extends AbstractController
             $manager->flush();
 
             $this->addFlash('success', "L'annonce a bien été modifiée !");
-            return $this->redirectToRoute('admin_annonces_index');
+            return $this->redirectToRoute('admin_annonces_list');
         }
 
         return $this->render("annonce/adminEditAnnonce.html.twig",[
-            'formAnnonce'=>$form->createView(),
-            'annonce'=>$annonce,
-            'bookings'=>$annonce->getBookings(),
-            'comments'=>$annonce->getComments()
+            'formAnnonce'   =>$form->createView(),
+            'annonce'       =>$annonce,
+            'bookings'      =>$annonce->getBookings(),
+            'comments'      =>$annonce->getComments(),
+            'parentRoute'   => "admin_annonce"
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use App\Entity\Booking;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -310,9 +311,12 @@ class Annonce
      *
      * @return array // un tableau d'objets DateTime représentant les jours d'occupation
      */
-    public function getNotAvailableDays(){
+    public function getNotAvailableDays(Booking $bookingAZapper=null){
         $noteAvailableDays=[];
         foreach($this->bookings as $booking){
+            // le if permet en cas de modification d'un booking déja enregistrer de ne pas le prendre en compte
+            // dans la liste des jours à éviter
+            if($booking != $bookingAZapper){ 
             // calculer les jours entre la date d'arrivée et de départ
             //resultat contient donc une liste de jour au format timestamp
             $resultat=range($booking->getStartDate()->getTimestamp(),
@@ -329,6 +333,7 @@ class Annonce
             // on ajoute les jours du tableau concernant le booking en cours
             // au tableau général de tous les jours de l'annonce
             $noteAvailableDays=array_merge($noteAvailableDays,$days);
+        }
         }
         return $noteAvailableDays;
     }

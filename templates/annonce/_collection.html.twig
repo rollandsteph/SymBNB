@@ -8,7 +8,6 @@ donc le conteneur global de tous les champs images #}
     {% else %}
         {% set author = app.request.attributes.get('annonce').author %}
     {% endif %}
-    {{dump()}}
     <div class="card bg-light mb-3">
         <div class="card-header">Les images de l'annonce</div>
         <div class="card-body">

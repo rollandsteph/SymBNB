@@ -26,21 +26,100 @@
 
             {# l'onglet des réservations de l'annonce #}
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                {# on inclus le fichier représentant la liste des réservations #}
-                {% include 'booking/_listBookings.html.twig' %}
+                <table class="table table-hover mt-5">
+                    <thead>
+                        <tr>
+                            <th class="text-center">N°</th>
+                            <th class="text-center">Client</th>
+                            <th class="text-center">Date début</th>
+                            <th class="text-center">Date fin</th>
+                            <th class="text-center">créé le</th>
+                            <th class="text-center">Montant</th>
+                            <th class="text-center">Note</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    {% for booking in annonce.bookings %}
+                        <tr class="align-middle">
+                            <td>{{booking.id}}
+                            </td>
+                            <td><img src="{{booking.booker.picture}} " alt="Avatar de {{booking.booker.fullName}}" class="avatar avatar-mini">
+                                {{booking.booker.fullName}}</td>
+                            <td>{{booking.startDate|date('d-m-Y')}}
+                            </td>
+                            <td>{{booking.endDate|date('d-m-Y')}}
+                            </td>
+                            <td>{{booking.createdAt|date('d-m-Y H:i')}}
+                            </td>
+                            <td>{{booking.amount|number_format('2',',',' ')}}
+                                &euro;
+                            </td>
+                            <td>
+                                {% if annonce.getCommentFromAuthor(booking.booker)is null %}
+                                    Non encore noté !
+                                {% else %}
+                                    {% include 'partials/rating.html.twig' with {
+                                        'rating' : annonce.getCommentFromAuthor(booking.booker).rating
+                                    } %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
 
             {# l'onglet des commentaires de l'annonce #}
             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                 {# on inclus le fichier représentant la liste des commentaires #}
-                {% include 'comment/_listComments.html.twig' %}
-            </div>
+                <table class="table table-hover mt-5 ">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Auteur</th>
+                            <th class="text-center">créé le</th>
+                            <th class="text-center">commentaire</th>
+                            <th class="text-center">Note</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment in comments %}
+                            <tr class="align-middle">
+                                <td><img src="{{comment.author.picture}} " alt="Avatar de {{comment.author.fullName}}" class="avatar avatar-mini">
+                                    {{comment.author.fullName}}</td>
+                                <td>{{comment.createdAt|date('d-m-Y')}}</td>
+                                <td>{{comment.content|raw}}
+                                </td>
+                                <td>{% include 'partials/rating.html.twig' with {
+                                        'rating' : comment.rating
+                                    } %}</td>
+                            </td>
+                            <td>
+                                <a href="{{path('admin_comment_edit', {'id': comment.id})}} ">
+                                    <i class="fas fa-edit fa-2x"></i>
+                                </a>
+                                <a href="{{path('admin_comment_delete', {'id': comment.id})}}">
+                                    <i class="fas fa-trash fa-2x"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
     <button type="submit" class="btn btn-success btn-lg btn-block">
         <i class="fas fa-check"></i>
         Modifier l'annonce</button>
-    {{form_end(formAnnonce)}}
+</div>
+{{form_end(formAnnonce)}}
 </div>
 {% endblock %}
 
@@ -50,13 +129,13 @@
 
 <script src="/js/ad.js"></script>
 <script>
-    {
-        /*$(function () {
+{
+    /*$(function () {
                 $('texarea.ckeditor').ckeditor();
             })*/
-    } {
-        /* CKEDITOR.replace('$(' texarea.ckeditor ')'); */
+} {
+    /* CKEDITOR.replace('$(' texarea.ckeditor ')'); */
 
-    }
+}
 </script>
 {% endblock %}

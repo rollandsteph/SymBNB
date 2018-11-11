@@ -1,0 +1,98 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Edition réservation :
+    {{booking.id}}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"/>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="my-5">Modifier la réservation n°
+            {{booking.id}}
+            pour l'annonce
+            <em>{{booking.annonce.title}}</em>
+        </h1>
+        <p>Annonce proposée par
+            <strong>{{ booking.annonce.author.fullName }}</strong>
+        </p>
+
+        {{form_start(formBooking)}}
+
+        <div class="alert alert-light">
+            <h4>Dates du séjour</h4>
+            <div class="row">
+                <div class="col">
+                    {{form_row(formBooking.startDate)}}
+                </div>
+                <div class="col">
+                    {{form_row(formBooking.endDate)}}
+                </div>
+            </div>
+            <h4 class="mt-2">Commentaire</h4>
+            {{form_row(formBooking.comment)}}
+
+            <h5 class="mt-2">Montant du séjour :
+                <span id="amount">...</span>
+                &euro;
+            </h5>
+            <span id="days">0</span>
+            nuit(s) à
+            {{ booking.annonce.price | number_format(2,',',' ') }}
+            &euro; par nuit
+            <div class="row">
+                <div class="col">
+                    <h4 class="mt-2">Client</h4>
+                    {{form_row(formBooking.booker)}}
+                </div>
+                <div class="col">
+                    <h4 class="mt-2">Annonce</h4>
+                    {{form_row(formBooking.annonce)}}
+                </div>
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-check"></i>
+            Enregistrer les modifications</button>
+        {{form_end(formBooking)}}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#admin_booking_startDate, #admin_booking_endDate').datepicker({
+                format: 'dd/mm/yyyy',
+                datesDisabled: [
+                    {% for day in booking.annonce.notAvailableDays(booking) %}
+                        "{{ day.format('d/m/Y')}}",
+                    {% endfor %}
+                ]
+            });
+            calculateAmount();
+            $('#admin_booking_startDate, #admin_booking_endDate').on('change', calculateAmount);
+        })
+
+        function calculateAmount() {
+            // on chope les dates
+            // on utilise replace pour remettre au format date international le format français qui est dans le champ
+            // on va utiliser une expression régulière
+            // (\d+)\/(\d+)\/(\d{4})  le '()' veut dire que l'on chope l'élément \d+ veut dire un ou plusieurs chiffre
+            // et \d{4} spécifie 4 chiffres le / de séparation de la date est échappé par le caractère \)
+            const endDate = new Date($('#admin_booking_endDate').val().replace(/(\d+)\/(\d+)\/(\d{4})/, '$3-$2-$1')); // on doit encadrer les expr régul par des /
+            const startDate = new Date($('#admin_booking_startDate').val().replace(/(\d+)\/(\d+)\/(\d{4})/, '$3-$2-$1'));
+            if (startDate && endDate && startDate < endDate) {
+                const DAY_TIME = 24 * 60 * 60 * 1000;
+                const interval = endDate.getTime() - startDate.getTime();
+                const days = interval / DAY_TIME;
+                const amount = days * {{ booking.annonce.price}};
+                $('#days').text(days);
+                $('#amount').text(amount.toLocaleString('fr-FR'));
+            }
+        }
+    </script>
+{% endblock %}

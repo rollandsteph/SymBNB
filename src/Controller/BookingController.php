@@ -24,7 +24,9 @@ class BookingController extends AbstractController
     public function book(Annonce $annonce, Request $request, ObjectManager $manager)
     {
         $booking=new Booking();
-        $form=$this->createForm(BookingType::class,$booking);
+        $form=$this->createForm(BookingType::class,$booking,[
+            'validation_groups'=>['Default','front']
+        ]);
 
         $form->handleRequest($request); // fait le mapping
 

@@ -1,44 +1,45 @@
 <table class="table table-hover mt-5">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Client</th>
-                            <th class="text-center">Date début</th>
-                            <th class="text-center">Date fin</th>
-                            <th class="text-center">créé le</th>
-                            <th class="text-center">Montant</th>
-                            <th class="text-center">Note</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    {% for booking in annonce.bookings %}
-                        <tr class="align-middle">
-                            <td><img src="{{booking.booker.picture}} " alt="Avatar de {{booking.booker.fullName}}" class="avatar avatar-mini">
-                                {{booking.booker.fullName}}</td>
-                            <td>{{booking.startDate|date('d-m-Y')}}
-                            </td>
-                            <td>{{booking.endDate|date('d-m-Y')}}
-                            </td>
-                            <td>{{booking.createdAt|date('d-m-Y H:i')}}
-                            </td>
-                            <td>{{booking.amount|number_format('2',',',' ')}}
-                                &euro;
-                            </td>
-                            <td>{% if annonce.getCommentFromAuthor(booking.booker) is null %}
-                                Non encore noté !
-                            {% else %}
-                                {% include 'partials/rating.html.twig' with {
-                                    'rating' : annonce.getCommentFromAuthor(booking.booker).rating
-                                } %}
-                            {% endif %}
-                             </td>
-                            <td>
-                                <a href="">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
+    <thead>
+        <tr>
+            <th class="text-center">Client</th>
+            <th class="text-center">Date début</th>
+            <th class="text-center">Date fin</th>
+            <th class="text-center">créé le</th>
+            <th class="text-center">Montant</th>
+            <th class="text-center">Note</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    {% for booking in annonce.bookings %}
+        <tr class="align-middle">
+            <td><img src="{{booking.booker.picture}} " alt="Avatar de {{booking.booker.fullName}}" class="avatar avatar-mini">
+                {{booking.booker.fullName}}</td>
+            <td>{{booking.startDate|date('d-m-Y')}}
+            </td>
+            <td>{{booking.endDate|date('d-m-Y')}}
+            </td>
+            <td>{{booking.createdAt|date('d-m-Y H:i')}}
+            </td>
+            <td>{{booking.amount|number_format('2',',',' ')}}
+                &euro;
+            </td>
+            <td>
+                {% if annonce.getCommentFromAuthor(booking.booker)is null %}
+                    Non encore noté !
+                {% else %}
+                    {% include 'partials/rating.html.twig' with {
+                        'rating' : annonce.getCommentFromAuthor(booking.booker).rating
+                    } %}
+                {% endif %}
+            </td>
+            <td>
+                <a href="">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <a href="">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
