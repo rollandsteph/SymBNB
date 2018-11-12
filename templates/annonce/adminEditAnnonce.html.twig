@@ -64,10 +64,10 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="">
+                                <a href="{{path('admin_booking_edit', {'id': booking.id})}}">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="">
+                                <a href="{{path('admin_booking_delete', {'id': booking.id})}}">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>

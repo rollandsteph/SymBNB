@@ -4,6 +4,7 @@ namespace App\Controller\AdminController;
 
 use App\Entity\Annonce;
 use App\Form\AnnonceType;
+use App\Service\PaginationService;
 use App\Repository\AnnonceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -13,14 +14,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminAnnonceController extends AbstractController
 {
     /**
-     * @Route("/admin/annonces", name="admin_annonces_list")
+     * @Route("/admin/annonces/{page}", name="admin_annonces_list", requirements={"page":"\d+"})
      */
-    public function listAnnonces(AnnonceRepository $repo)
+    public function listAnnonces(PaginationService $pagination,$page=1)
     {
-        $annonces=$repo->findAll();
+        $pagination	->setEntityClass(Annonce::class);
 
         return $this->render('annonce/adminListAnnonces.html.twig', [
-            'annonces'=> $annonces
+            'pagination' => $pagination
         ]);
     }
 

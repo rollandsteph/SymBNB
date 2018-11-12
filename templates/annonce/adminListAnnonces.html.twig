@@ -17,43 +17,48 @@
                 </tr>
             </thead>
             <tbody>
-                {% for annonce in annonces %}
-                    {% set nbComments = annonce.comments|length %}
+                {% for annonce in pagination.data %}
+                    {% set nbComments = annonce.comments | length %}
                     <tr>
                         <td class="align-middle">{{annonce.id}}
                         </td>
                         <td class="align-middle">{{annonce.title}}
                         </td>
-                        <td class="align-middle"><img src="{{annonce.author.picture}}" alt="Avatar de {{annonce.author.fullName}} " class="avatar avatar-mini">  {{annonce.author.fullName}}
+                        <td class="align-middle"><img src="{{annonce.author.picture}}" alt="Avatar de {{annonce.author.fullName}} " class="avatar avatar-mini">
+                            {{annonce.author.fullName}}
                         </td>
                         <td class="align-middle text-center">
-                            <span class="badge badge-primary rounded ">{{annonce.bookings|length}}</span> 
+                            <span class="badge badge-primary rounded ">{{annonce.bookings|length}}</span>
                         </td>
-                        <td><div class="mx-auto text-center">
-                        {% if nbComments == 0 %}
-                            Non encore noté
-                            </div>
-                        {% else %}
-                            {% include 'partials/rating.html.twig' with {
+                        <td>
+                            <div class="mx-auto text-center">
+                                {% if nbComments == 0 %}
+                                    Non encore noté
+                                </div>
+                            {% else %}
+                                {% include 'partials/rating.html.twig' with {
                                     'rating' : annonce.getAvgRatings
                                 } %}
-                                </div>
-                            <div class="mx-auto text-center"><span class="badge badge-success rounded  ">{{annonce.getAvgRatings|number_format(1,',',' ')}}</span></div>
+                            </div>
+                            <div class="mx-auto text-center">
+                                <span class="badge badge-success rounded  ">{{annonce.getAvgRatings|number_format(1,',',' ')}}</span></div>
                         {% endif %}
-                        
-                        </td>
-                        {# colonne action #}
-                        <td>
-                            <a href="{{path('admin_annonce_edit',{'id': annonce.id })}} " class="btn btn-primary">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="{{path('admin_annonce_delete', {'id': annonce.id})}}  " class="btn btn-danger">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+
+                    </td>
+                    {# colonne action #}
+                    <td>
+                        <a href="{{path('admin_annonce_edit',{'id': annonce.id })}} " class="btn btn-primary">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{{path('admin_annonce_delete', {'id': annonce.id})}}  " class="btn btn-danger">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {# inclusion de la pagination #}
+    {{pagination.display()}}
+</div>
 {% endblock %}

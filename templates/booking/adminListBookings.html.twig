@@ -18,7 +18,7 @@
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
-            {% for booking in bookings %}
+            {% for booking in pagination.data %}
                 <tr class="align-middle">
                     <td>{{booking.id}}</td>
                     <td>{{booking.createdAt|date('d-m-Y H:i')}}
@@ -45,12 +45,14 @@
                         <a href="{{path('admin_booking_edit', {'id': booking.id})}} ">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a href="">
+                        <a href="{{path('admin_booking_delete', {'id': booking.id})}}">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
                 </tr>
             {% endfor %}
         </table>
+        {# inclusion de la pagination #}
+    {{pagination.display()}}
     </div>
 {% endblock %}

@@ -34,7 +34,7 @@ class BookingType extends ApplicationType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Booking::class,
+            'data_class' => Booking::class
         ]);
     }
 }

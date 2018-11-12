@@ -35,7 +35,9 @@ class Booking
     /**
      * @ORM\Column(type="datetime")
      * @Assert\Date(message= "Attention ce champ doit être une date")
-     * @Assert\GreaterThan("today", message="La date d'arrivée doit être ultérieure à la date d'aujourd'hui")
+     * @Assert\GreaterThan("today", 
+     *                      message="La date d'arrivée doit être ultérieure à la date d'aujourd'hui",
+     *                      groups={"front"})
      */
     private $startDate;
 
@@ -44,8 +46,7 @@ class Booking
      * @Assert\Date(message= "Attention ce champ doit être une date")
      * @Assert\GreaterThan(
      *              propertyPath="startDate", 
-     *              message = "La date de départ doit être postérieure à la date d'arrivée",
-     *              groups={"front"})
+     *              message = "La date de départ doit être postérieure à la date d'arrivée")
      */
     private $endDate;
 
@@ -154,6 +155,8 @@ class Booking
     }
 
     /**
+     * Permet de calculer le montant de la réservation avant l'enregistrement
+     * 
      * @ORM\PrePersist
      */
     public function prePersist(){
@@ -164,10 +167,35 @@ class Booking
 
         if(empty($this->amout)){
             // le montant est le nombre de jours par le prix par jour
-            $this->amount=$this->getDuration()*$this->annonce->getPrice();
+            $this->amount=$this->CalculMontantReservation();
         }
     }
 
+    /**
+     * Enregitre le montant de la réservation avant mise à jour
+     *
+     * @ORM\PreUpdate
+     * 
+     * @return void
+     */
+    public function preUpdate(){
+        $this->amount=$this->CalculMontantReservation();
+    }
+
+    /**
+     * calcule le montant de la réservation
+     * et renvoie le montant
+     *
+     * @return float
+     */
+    public function CalculMontantReservation(){
+        return $this->getDuration()*$this->annonce->getPrice();
+    }
+    /**
+     * calcul le nombre de jours de la réservation
+     *
+     * @return int
+     */
     public function getDuration(){
         // $duration est un objet de type dateinterval
         $duration=$this->endDate->diff($this->startDate);
