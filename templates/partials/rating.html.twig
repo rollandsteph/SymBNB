@@ -1,12 +1,16 @@
 <span class="rating">
+    {% if bad is not defined %}
+        {% set bad = '' %}
+    {% endif %}
+
     {% for i in 1..5 %}
         {% if i <= rating %}
-            <i class="fas fa-star"></i>
+            <i class="fas fa-star {{bad}}"></i>
         {% else %}
-            {% if (i -1)< rating %}
-                <i class="fas fa-star-half-alt"></i>
+            {% if (i - 1) < rating %}
+                <i class="fas fa-star-half-alt {{bad}}"></i>
             {% else %}
-                <i class="far fa-star"></i>
+                <i class="far fa-star {{bad}}"></i>
             {% endif %}
         {% endif %}
     {% endfor %}

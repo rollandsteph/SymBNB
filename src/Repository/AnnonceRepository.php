@@ -19,6 +19,22 @@ class AnnonceRepository extends ServiceEntityRepository
         parent::__construct($registry, Annonce::class);
     }
 
+    /**
+     * retourne les n meilleurs annonces (meilleurs moyenne des notes)
+     *
+     * @param [type] $limit
+     * @return void
+     */
+    public function findBestAnnonces($limit){
+
+        $query = $this	->createQueryBuilder('a')
+                        ->select('a as annonce, AVG(c.rating) as avgRatings')
+                        ->join('a.comments', 'c')
+                        ->groupBy('a')
+                        ->orderBy('avgRatings', 'DESC')
+                        ->setMaxResults($limit);
+        return $query->getQuery()->getResult();
+    }
 //    /**
 //     * @return Ad[] Returns an array of Ad objects
 //     */
